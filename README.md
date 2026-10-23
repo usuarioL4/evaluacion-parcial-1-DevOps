@@ -64,6 +64,7 @@ Para desplegar y verificar la solución en un entorno local:
    git clone https://github.com/usuarioL4/evaluacion-parcial-1-DevOps
    cd evaluacion-parcial-1-DevOps
 
+## Reflexiones Individuales
 
 1. Jorge Alfaro: 
 
