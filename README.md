@@ -1,19 +1,19 @@
-# 🚀 Proyecto DevOps: Pipeline CI/CD, Contenerización y Orquestación (Evaluación Parcial N°2)
+# Proyecto DevOps: Pipeline CI/CD, Contenerización y Orquestación (Evaluación Parcial N°2)
 
-**Asignatura:** Ingeniería DevOps (DOY0101)  
-**Institución:** Duoc UC  
+**Asignatura:** Ingeniería DevOps
+**Integrantes:** Matías Gonzalez, Jerson Pedreros, Jorge Alfaro
 
----
+--- 
 
-## 📋 Tabla de Contenidos
-1. [Descripción del Proyecto](#1-descripción-del-proyecto)
-2. [Estrategia de Contenerización (IE1)](#2-estrategia-de-contenización-ie1)
-3. [Pruebas Automatizadas y Políticas de Calidad (IE2)](#3-pruebas-automatizadas-y-políticas-de-calidad-ie2)
-4. [Seguridad, Gobernanza y Bloqueos (IE3)](#4-seguridad-gobernanza-y-bloqueos-ie3)
-5. [Despliegue Automático y Trazabilidad (IE4)](#5-despliegue-automatico-y-trazabilidad-ie4)
-6. [Orquestación de Contenedores (IE5)](#6-orquestación-de-contenedores-ie5)
-7. [Instrucciones de Ejecución Local](#7-instrucciones-de-ejecución-local)
-8. [Declaración Ética de Uso de IA y Reflexiones Personales](#8-declaración-ética-de-uso-de-ia-y-reflexiones-personal)
+## Tabla de Contenidos
+1. Descripción del Proyecto
+2. Estrategia de Contenerización
+3. Pruebas Automatizadas y Políticas de Calidad
+4. Seguridad, Gobernanza y Bloqueos
+5. Despliegue Automático y Trazabilidad
+6. Orquestación de Contenedores
+7. Instrucciones de Ejecución Local
+8. Declaración Ética de Uso de IA y Reflexiones Personales
 
 ---
 
@@ -61,6 +61,14 @@ Para gestionar soluciones escalables y asegurar la estabilidad operativa mediant
 Para desplegar y verificar la solución en un entorno local:
 
 1. Clonar el repositorio:
-   ```bash
-   git clone <url-del-repositorio>
-   cd <nombre-de-la-carpeta>
+   git clone https://github.com/usuarioL4/evaluacion-parcial-1-DevOps
+   cd evaluacion-parcial-1-DevOps
+
+
+1. Jorge Alfaro: 
+
+Mi aporte al proyecto fue la implementacion del pipeline CI/CD usando GitHub Actions. Estructure el archivo YAML para automatizar la contruccion de la imagen docker, la ejecucion de pruebas y la implementacion del token snyk para la seguridad.
+
+Tuve una dificultad cuando intentaba correr el pipeline ya que se bloqueaba, por otro lado tuve que implementar el token snyk en los secretos del repositorio, por ultimo solucione un problema donde el puerto 8080 quedaba ocupado por el contenedor de pruebas lo que impedia que el docker compose levantara el servicio final
+
+Como aprendizaje final me quedo con que cuando vi que paso todo el flujo en verde, entendi que eso era el valor de esta asignatura, el hecho de que hay que probar el codigo, una vez escaneado el codigo ahi finalmente se despliega de forma automatica, por eso es importante tener un pipeline bien hecho para cada proyecto.
