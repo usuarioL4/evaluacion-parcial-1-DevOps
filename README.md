@@ -80,3 +80,11 @@ Mi aporte en el proyecto fue la implementacion de ramas y configuracion en el ci
 uno de los obstaculos que tuve fue SonarQube, comprenderlo bien, ya que es una herramienta con muchas funciones igual, pero no tuve tanta complicaciones en terminar de comprenderlo, el uso de la ia me parece excelente para aprender mas, para evitar tener dudas y comprender mas el flujo con mas ejemplos practicos,
 
  como reflexion sobre este aprendizaje final , aprendi bastante sobre flujo de trabajo profesional en git, he visto mucha ventaja sobre estas skills permtitiendo ser mas competetitivo gracias al aporte de valor de esta asignatura y al profesor.
+
+3. Matias González
+
+Mi aporte en el proyecto fue la contenerizacion de la aplicacion web usando Docker, para asi configurar la imagen ya optimizada con nginx alpine y asi poder estructurar la orquestacion local con docker compose junto con las validaciones del pipeline.
+
+La dificultad que tuve fue con los puertos al levantar los contenedores ya que quedaba ocupado el 8080 al hacer las pruebas, lo que me obligó a entender de mejor manera como limpiar los contenedores desde la terminal .
+
+y ya como aprendizaje es que me quedo muy claro la importancia de usar las imagenes ligeras como alpne para optimizar los recursos  y a parte como docker compose facilita levantar todo de forma estable.
