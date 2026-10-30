@@ -73,3 +73,10 @@ Mi aporte al proyecto fue la implementacion del pipeline CI/CD usando GitHub Act
 Tuve una dificultad cuando intentaba correr el pipeline ya que se bloqueaba, por otro lado tuve que implementar el token snyk en los secretos del repositorio, por ultimo solucione un problema donde el puerto 8080 quedaba ocupado por el contenedor de pruebas lo que impedia que el docker compose levantara el servicio final
 
 Como aprendizaje final me quedo con que cuando vi que paso todo el flujo en verde, entendi que eso era el valor de esta asignatura, el hecho de que hay que probar el codigo, una vez escaneado el codigo ahi finalmente se despliega de forma automatica, por eso es importante tener un pipeline bien hecho para cada proyecto.
+
+
+2. Jerson pedreros
+Mi aporte en el proyecto fue la implementacion de ramas y configuracion en el ci/cd (con jorge), siguiendo las practicas de trunk based development,  permitiendo hacer entregas continuas mas rapidas mediante ramas como feature (para funciones nuevas) y hotfix(para errores de alta gravedad).
+uno de los obstaculos que tuve fue SonarQube, comprenderlo bien, ya que es una herramienta con muchas funciones igual, pero no tuve tanta complicaciones en terminar de comprenderlo, el uso de la ia me parece excelente para aprender mas, para evitar tener dudas y comprender mas el flujo con mas ejemplos practicos,
+
+ como reflexion sobre este aprendizaje final , aprendi bastante sobre flujo de trabajo profesional en git, he visto mucha ventaja sobre estas skills permtitiendo ser mas competetitivo gracias al aporte de valor de esta asignatura y al profesor.
