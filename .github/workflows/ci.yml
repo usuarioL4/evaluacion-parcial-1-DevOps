@@ -34,7 +34,7 @@ jobs:
 
       # ESCANEO DE SEGURIDAD Y GOBERNANZA (Snyk)
       # ==========================================
-      - name: 🔒 IE3 - Escaneo de Seguridad de la Imagen con Snyk
+      - name:  Escaneo de Seguridad de la Imagen con Snyk
         uses: snyk/actions/docker@master
         continue-on-error: false
         env:
