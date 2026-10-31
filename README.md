@@ -1,19 +1,19 @@
-# 🚀 Proyecto DevOps: Pipeline CI/CD, Contenerización y Orquestación (Evaluación Parcial N°2)
+# Proyecto DevOps: Pipeline CI/CD, Contenerización y Orquestación (Evaluación Parcial N°2)
 
-**Asignatura:** Ingeniería DevOps (DOY0101)  
-**Institución:** Duoc UC  
+**Asignatura:** Ingeniería DevOps
+**Integrantes:** Matías Gonzalez, Jerson Pedreros, Jorge Alfaro
 
----
+--- 
 
-## 📋 Tabla de Contenidos
-1. [Descripción del Proyecto](#1-descripción-del-proyecto)
-2. [Estrategia de Contenerización (IE1)](#2-estrategia-de-contenización-ie1)
-3. [Pruebas Automatizadas y Políticas de Calidad (IE2)](#3-pruebas-automatizadas-y-políticas-de-calidad-ie2)
-4. [Seguridad, Gobernanza y Bloqueos (IE3)](#4-seguridad-gobernanza-y-bloqueos-ie3)
-5. [Despliegue Automático y Trazabilidad (IE4)](#5-despliegue-automatico-y-trazabilidad-ie4)
-6. [Orquestación de Contenedores (IE5)](#6-orquestación-de-contenedores-ie5)
-7. [Instrucciones de Ejecución Local](#7-instrucciones-de-ejecución-local)
-8. [Declaración Ética de Uso de IA y Reflexiones Personales](#8-declaración-ética-de-uso-de-ia-y-reflexiones-personal)
+## Tabla de Contenidos
+1. Descripción del Proyecto
+2. Estrategia de Contenerización
+3. Pruebas Automatizadas y Políticas de Calidad
+4. Seguridad, Gobernanza y Bloqueos
+5. Despliegue Automático y Trazabilidad
+6. Orquestación de Contenedores
+7. Instrucciones de Ejecución Local
+8. Declaración Ética de Uso de IA y Reflexiones Personales
 
 ---
 
@@ -61,6 +61,30 @@ Para gestionar soluciones escalables y asegurar la estabilidad operativa mediant
 Para desplegar y verificar la solución en un entorno local:
 
 1. Clonar el repositorio:
-   ```bash
-   git clone <url-del-repositorio>
-   cd <nombre-de-la-carpeta>
+   git clone https://github.com/usuarioL4/evaluacion-parcial-1-DevOps
+   cd evaluacion-parcial-1-DevOps
+
+## Reflexiones Individuales
+
+1. Jorge Alfaro: 
+
+Mi aporte al proyecto fue la implementacion del pipeline CI/CD usando GitHub Actions. Estructure el archivo YAML para automatizar la contruccion de la imagen docker, la ejecucion de pruebas y la implementacion del token snyk para la seguridad.
+
+Tuve una dificultad cuando intentaba correr el pipeline ya que se bloqueaba, por otro lado tuve que implementar el token snyk en los secretos del repositorio, por ultimo solucione un problema donde el puerto 8080 quedaba ocupado por el contenedor de pruebas lo que impedia que el docker compose levantara el servicio final
+
+Como aprendizaje final me quedo con que cuando vi que paso todo el flujo en verde, entendi que eso era el valor de esta asignatura, el hecho de que hay que probar el codigo, una vez escaneado el codigo ahi finalmente se despliega de forma automatica, por eso es importante tener un pipeline bien hecho para cada proyecto.
+
+
+2. Jerson pedreros
+Mi aporte en el proyecto fue la implementacion de ramas y configuracion en el ci/cd (con jorge), siguiendo las practicas de trunk based development,  permitiendo hacer entregas continuas mas rapidas mediante ramas como feature (para funciones nuevas) y hotfix(para errores de alta gravedad).
+uno de los obstaculos que tuve fue SonarQube, comprenderlo bien, ya que es una herramienta con muchas funciones igual, pero no tuve tanta complicaciones en terminar de comprenderlo, el uso de la ia me parece excelente para aprender mas, para evitar tener dudas y comprender mas el flujo con mas ejemplos practicos,
+
+ como reflexion sobre este aprendizaje final , aprendi bastante sobre flujo de trabajo profesional en git, he visto mucha ventaja sobre estas skills permtitiendo ser mas competetitivo gracias al aporte de valor de esta asignatura y al profesor.
+
+3. Matias González
+
+Mi aporte en el proyecto fue la contenerizacion de la aplicacion web usando Docker, para asi configurar la imagen ya optimizada con nginx alpine y asi poder estructurar la orquestacion local con docker compose junto con las validaciones del pipeline.
+
+La dificultad que tuve fue con los puertos al levantar los contenedores ya que quedaba ocupado el 8080 al hacer las pruebas, lo que me obligó a entender de mejor manera como limpiar los contenedores desde la terminal .
+
+y ya como aprendizaje es que me quedo muy claro la importancia de usar las imagenes ligeras como alpne para optimizar los recursos  y a parte como docker compose facilita levantar todo de forma estable.

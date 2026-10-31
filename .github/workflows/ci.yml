@@ -19,7 +19,7 @@ jobs:
         run: |
           echo "Iniciando validación de políticas de calidad del proyecto..."
           if [ -f "index.html" ] && grep -q "<html" index.html; then
-            echo "[✔] OK: index.html existe y contiene estructura HTML válida."
+            echo "OK: index.html existe y contiene estructura HTML válida."
           else
             echo "[x] ERROR: index.html no cumple con los estándares de calidad."
             exit 1
@@ -28,7 +28,7 @@ jobs:
       - name: Configurar Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      - name: Construir Imagen Temporal para Pruebas
+      - name: Construir Imagen Temporal para Pruebas (IE1)
         run: |
           docker build -t test-microservice:${{ github.sha }} .
 
