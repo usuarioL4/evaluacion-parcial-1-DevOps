@@ -2,9 +2,7 @@ name: CI/CD Pipeline - DevOps Parcial 2
 
 on:
   push:
-    branches: [ main, develop ]
-  pull_request:
-    branches: [ main, develop ]
+    branches: main
 
 jobs:
   build-and-test:
