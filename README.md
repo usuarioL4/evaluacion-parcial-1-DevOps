@@ -88,3 +88,4 @@ Mi aporte en el proyecto fue la contenerizacion de la aplicacion web usando Dock
 La dificultad que tuve fue con los puertos al levantar los contenedores ya que quedaba ocupado el 8080 al hacer las pruebas, lo que me obligó a entender de mejor manera como limpiar los contenedores desde la terminal .
 
 y ya como aprendizaje es que me quedo muy claro la importancia de usar las imagenes ligeras como alpne para optimizar los recursos  y a parte como docker compose facilita levantar todo de forma estable.
+u
