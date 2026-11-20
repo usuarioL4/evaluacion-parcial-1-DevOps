@@ -1,90 +1,115 @@
-name: CI/CD Pipeline - DevOps Parcial 2
+
+name: CI Pipeline - DevOps Parcial 3
 
 on:
   push:
-    branches: main
+    branches:
+      - main
+
+  workflow_dispatch:
+
+permissions:
+  contents: read
 
 jobs:
   build-and-test:
+    name: Validación, SonarQube y Docker
     runs-on: ubuntu-latest
+
     steps:
+      # ==========================================
+      # 1. OBTENER CODIGO FUENTE
+      # ==========================================
       - name: Checkout del repositorio
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
-      #  PRUEBAS AUTOMATIZADAS Y POLÍTICAS DE CALIDAD
       # ==========================================
-      - name: Validación Estructural de Código (Prueba estática)
+      # 2. VALIDACION ESTRUCTURAL
+      # ==========================================
+      - name: Validación estructural HTML
         run: |
-          echo "Iniciando validación de políticas de calidad del proyecto..."
-          if [ -f "index.html" ] && grep -q "<html" index.html; then
-            echo "OK: index.html existe y contiene estructura HTML válida."
+          echo "Verificando estructura del proyecto..."
+
+          if [ -f "index.html" ] && grep -qi "<html" index.html; then
+            echo "OK: index.html contiene la etiqueta HTML."
           else
-            echo "[x] ERROR: index.html no cumple con los estándares de calidad."
+            echo "ERROR: No cumple la validación estructural."
             exit 1
           fi
 
+      # ==========================================
+      # 3. ANALISIS ESTATICO CON SONARQUBE
+      # ==========================================
+      - name: Análisis de calidad con SonarQube
+        uses: SonarSource/sonarqube-scan-action@v8.5.0
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        with:
+          args: >
+            -Dsonar.qualitygate.wait=true
+
+      # ==========================================
+      # 4. CONFIGURAR DOCKER BUILDX
+      # ==========================================
       - name: Configurar Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      - name: Construir Imagen Temporal para Pruebas (IE1)
+      # ==========================================
+      # 5. CONSTRUIR IMAGEN DOCKER
+      # ==========================================
+      - name: Construir imagen Docker
         run: |
-          docker build -t test-microservice:${{ github.sha }} .
+          docker build \
+            -t test-microservice:${{ github.sha }} .
 
-      # ESCANEO DE SEGURIDAD Y GOBERNANZA (Snyk)
-      # ==========================================
-      - name:  Escaneo de Seguridad de la Imagen con Snyk
-        uses: snyk/actions/docker@master
-        continue-on-error: false
-        env:
-          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-        with:
-          image: test-microservice:${{ github.sha }}
-          args: --severity-threshold=high
+          echo "Imagen construida correctamente."
 
-      # SMOKE TEST / PRUEBA FUNCIONAL
       # ==========================================
-      - name: Ejecución de Smoke Test (Prueba funcional automatizada)
+      # 6. SMOKE TEST AUTOMATIZADO
+      # ==========================================
+      - name: Ejecutar Smoke Test
         run: |
-          echo "Levantando contenedor en entorno aislado para prueba de integración..."
-          docker run -d -p 8080:80 --name container-test test-microservice:${{ github.sha }}
-          sleep 3
-          http_status=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:8080)
-          echo "Código HTTP obtenido: $http_status"
-          if [ "$http_status" -eq 200 ]; then
-            echo "[✔] ÉXITO: La prueba automatizada pasó correctamente."
-            docker rm -f container-test
-          else
-            echo "[❌] FALLO: El microservicio no respondió con HTTP 200."
-            docker rm -f container-test
-            exit 1
-          fi
+          echo "Iniciando prueba funcional..."
 
-      # TRAZABILIDAD Y ETIQUETADO FINAL
+          docker run -d \
+            -p 8080:80 \
+            --name container-test \
+            test-microservice:${{ github.sha }}
+
+          trap 'docker rm -f container-test >/dev/null 2>&1 || true' EXIT
+
+          for intento in {1..10}; do
+            http_status=$(curl -s -o /dev/null \
+              -w "%{http_code}" http://localhost:8080/ || true)
+
+            echo "Intento $intento - HTTP: $http_status"
+
+            if [ "$http_status" = "200" ]; then
+              echo "OK: Smoke Test aprobado."
+              exit 0
+            fi
+
+            sleep 2
+          done
+
+          echo "ERROR: Smoke Test fallido."
+          docker logs container-test
+          exit 1
+
       # ==========================================
-      - name: Etiquetado final para Trazabilidad (IE4)
+      # 7. TRAZABILIDAD DE VERSION
+      # ==========================================
+      - name: Registro de versión validada
         run: |
-          docker tag test-microservice:${{ github.sha }} mi-sitio-devops:latest
-          echo "Imagen validada y lista para despliegue."
+          echo "Todas las validaciones fueron aprobadas."
+          echo "Commit validado: ${{ github.sha }}"
+          echo "Imagen: test-microservice:${{ github.sha }}"
+          echo "CI finalizado correctamente."
 
-      # DESPLIEGUE EN PRODUCCIÓN (AWS EC2)
       # ==========================================
-      - name: Copiar archivos al servidor EC2
-        uses: appleboy/scp-action@master
-        with:
-          host: ${{ secrets.HOST }}
-          username: ubuntu
-          key: ${{ secrets.SSH_KEY }}
-          source: "."
-          target: "/home/ubuntu/app-devops"
+      # FIN DEL PIPELINE
+      # El despliegue en EC2 es MANUAL.
+      # ==========================================
 
-      - name: Ejecutar despliegue remoto en AWS
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.HOST }}
-          username: ubuntu
-          key: ${{ secrets.SSH_KEY }}
-          script: |
-            cd /home/ubuntu/app-devops
-            docker compose down
-            docker compose up -d --build
-            docker image prune -f
