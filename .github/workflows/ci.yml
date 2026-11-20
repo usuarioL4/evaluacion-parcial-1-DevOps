@@ -39,7 +39,7 @@ jobs:
             exit 1
           fi
 
-      # ==========================================
+       # ==========================================
       # 3. ANALISIS ESTATICO CON SONARQUBE
       # ==========================================
       - name: Análisis de calidad con SonarQube
@@ -48,6 +48,10 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         with:
           args: >
+            -Dsonar.projectKey=usuarioL4_evaluacion-parcial-1-DevOps
+            -Dsonar.organization=usuariol4
+            -Dsonar.sources=.
+            -Dsonar.sourceEncoding=UTF-8
             -Dsonar.qualitygate.wait=true
 
       # ==========================================
