@@ -1,4 +1,4 @@
-# Proyecto DevOps: Pipeline CI/CD, Contenerización y Orquestación (Evaluación Parcial N°2)
+# Proyecto DevOps: Pipeline CI/CD, Contenerización y Orquestación (Evaluación Parcial N°3)
 
 **Asignatura:** Ingeniería DevOps
 **Integrantes:** Matías Gonzalez, Jerson Pedreros, Jorge Alfaro
