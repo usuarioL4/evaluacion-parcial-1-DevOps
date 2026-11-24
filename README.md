@@ -1,91 +1,101 @@
-# Proyecto DevOps: Pipeline CI/CD, Contenerización y Orquestación (Evaluación Parcial N°3)
+# DevOps – Evaluación Parcial 3
 
-**Asignatura:** Ingeniería DevOps
-**Integrantes:** Matías Gonzalez, Jerson Pedreros, Jorge Alfaro.
+## 1. Estrategia de monitoreo (IE1)
 
---- 
+Se utiliza **AWS CloudWatch** como herramienta de monitoreo de la infraestructura desplegada en Amazon EC2.
 
-## Tabla de Contenidos
-1. Descripción del Proyecto
-2. Estrategia de Contenerización
-3. Pruebas Automatizadas y Políticas de Calidad
-4. Seguridad, Gobernanza y Bloqueos
-5. Despliegue Automático y Trazabilidad
-6. Orquestación de Contenedores
-7. Instrucciones de Ejecución Local
-8. Declaración Ética de Uso de IA y Reflexiones Personales
+Mediante CloudWatch Agent se recopilan métricas de rendimiento, como el consumo de CPU, memoria RAM y almacenamiento.
 
----
+Estas métricas permiten observar el comportamiento de los recursos y detectar posibles problemas de rendimiento. CloudWatch también permite integrar registros de errores y configurar alarmas de disponibilidad mediante los mecanismos de recopilación correspondientes.
 
-## 1. Descripción del Proyecto
-Este repositorio contiene la implementación integral del ciclo de vida de desarrollo automatizado (CI/CD) para el microservicio web del curso. La solución migra la aplicación hacia una arquitectura basada en contenedores modernos, garantizando alta disponibilidad, pruebas automatizadas de integración, análisis continuo de vulnerabilidades en la cadena de suministro de software y trazabilidad de extremo a extremo.
+## 2. Estrategia de despliegue (IE2)
 
----
+Se utiliza **Docker Compose** como herramienta para administrar y desplegar los componentes de la aplicación, en reemplazo de Kubernetes, según la modificación autorizada para la evaluación.
 
-## 2. Estrategia de Contenerización (IE1)
-Para cumplir con el uso eficaz de contenedores e imágenes optimizadas:
-* **Imagen Base:** Se implementó **`nginx:alpine`**, una distribución ultraligera basada en Alpine Linux que minimiza el tamaño de almacenamiento de la imagen, optimiza los tiempos de transferencia en red y reduce drásticamente la superficie de ataque frente a vulnerabilidades.
-* **Dockerfile:** Encapsula de forma limpia los elementos estáticos del microservicio hacia el directorio raíz de Nginx (`/usr/share/nginx/html`) y expone el puerto estándar HTTP (80).
+El despliegue se realiza manualmente en AWS EC2 mediante:
 
----
+```bash
+docker compose up -d --build
+```
 
-## 3. Pruebas Automatizadas y Políticas de Calidad (IE2)
-El pipeline de Integración Continua (CI) ejecuta validaciones estrictas antes de aprobar el empaquetado:
-* **Validación Estática:** Comprobación automatizada de la existencia e integridad estructural del archivo `index.html`.
-* **Smoke Test (Prueba Funcional):** El runner de GitHub Actions levanta la imagen recién construida en un entorno aislado y ejecuta una petición HTTP automatizada (`curl`). Si la aplicación no responde con un código de éxito **HTTP 200 OK**, el pipeline emite un error (`exit 1`) y se bloquea de inmediato.
+Docker Compose permite definir los servicios, sus redes, puertos y configuraciones en un archivo YAML, facilitando la administración de los contenedores.
 
----
+El despliegue se mantiene separado del pipeline de integración continua, permitiendo decidir cuándo actualizar la aplicación.
 
-## 4. Seguridad, Gobernanza y Bloqueos (IE3)
-Para asegurar el cumplimiento de los estándares de seguridad en entornos con contenedores:
-* **Dependabot:** Activado de forma nativa en GitHub para el monitoreo continuo y alertas automáticas de dependencias.
-* **Análisis de Seguridad con Snyk:** Integrado dentro del pipeline de CI/CD analizando directamente la imagen de Docker mediante `snyk/actions/docker`. Está configurado con un umbral estricto (`--severity-threshold=high`) y políticas de bloqueo activo (`continue-on-error: false`) para impedir el paso de artefactos vulnerables.
+## 3. Estrategia de observación (IE3)
 
----
+La observabilidad se aborda mediante métricas de infraestructura y resultados de los controles de integración continua.
 
-## 5. Despliegue Automático y Trazabilidad (IE4)
-El flujo automatiza la gestión de versiones y auditoría:
-* **Trazabilidad por Commit:** Cada imagen generada es etiquetada unívocamente utilizando el hash SHA del commit (`${{ github.sha }}`) además de la etiqueta `latest`, lo que permite conocer con precisión milimétrica qué versión exacta del código fuente originó cada contenedor.
+Las herramientas consideradas son:
 
----
+| Métrica | Herramienta |
+|---|---|
+| CPU y memoria | AWS CloudWatch |
+| Errores registrados | CloudWatch Logs, si está configurado |
+| Cobertura de pruebas | SonarQube, si se importan reportes de cobertura |
+| Tiempo de despliegue | Medición manual del despliegue con Docker Compose |
 
-## 6. Orquestación de Contenedores (IE5)
-Para gestionar soluciones escalables y asegurar la estabilidad operativa mediante **Docker Compose**:
-* **Alta Disponibilidad:** Configuración de políticas de recuperación automática ante fallos (`restart: always`).
-* **Verificaciones de Salud (Healthcheck):** Monitoreo continuo del estado operativo del servidor Nginx dentro del contenedor.
-* **Límites de Recursos:** Restricciones estrictas de hardware (`deploy.resources.limits`) para CPU y memoria RAM, asegurando un desempeño eficiente y controlado.
+El dashboard de CloudWatch permite visualizar el consumo de recursos de la instancia EC2.
 
----
+Las métricas de calidad del código se consultan mediante SonarQube Cloud. El pipeline actual no genera reportes de cobertura ni mide automáticamente la duración del despliegue manual.
 
-## 7. Instrucciones de Ejecución Local
-Para desplegar y verificar la solución en un entorno local:
+## 4. Estrategia de políticas de cumplimiento (IE5)
 
-1. Clonar el repositorio:
-   git clone https://github.com/usuarioL4/evaluacion-parcial-1-DevOps
-   cd evaluacion-parcial-1-DevOps
+Se implementaron controles mediante **SonarQube Cloud** y reglas de protección de ramas en GitHub.
 
-## Reflexiones Individuales
+SonarQube realiza análisis estático del código para identificar problemas relacionados con seguridad, fiabilidad y mantenibilidad. El Quality Gate permite evaluar si el código cumple las condiciones de calidad establecidas.
 
-1. Jorge Alfaro: 
+En GitHub se configuraron las siguientes reglas de Branch Protection:
 
-Mi aporte al proyecto fue la implementacion del pipeline CI/CD usando GitHub Actions. Estructure el archivo YAML para automatizar la contruccion de la imagen docker, la ejecucion de pruebas y la implementacion del token snyk para la seguridad.
+- **Require a pull request before merging:** exige utilizar Pull Requests para integrar cambios.
+- **Require approvals:** solicita aprobación antes de realizar el merge.
+- **Require status checks to pass before merging:** exige que las verificaciones obligatorias finalicen correctamente.
 
-Tuve una dificultad cuando intentaba correr el pipeline ya que se bloqueaba, por otro lado tuve que implementar el token snyk en los secretos del repositorio, por ultimo solucione un problema donde el puerto 8080 quedaba ocupado por el contenedor de pruebas lo que impedia que el docker compose levantara el servicio final
+Estas políticas permiten controlar la incorporación de cambios a la rama principal.
 
-Como aprendizaje final me quedo con que cuando vi que paso todo el flujo en verde, entendi que eso era el valor de esta asignatura, el hecho de que hay que probar el codigo, una vez escaneado el codigo ahi finalmente se despliega de forma automatica, por eso es importante tener un pipeline bien hecho para cada proyecto.
+## 5. Documentación sobre integración en el pipeline CI/CD (IE4)
 
+Se implementó un pipeline de integración continua mediante GitHub Actions, ejecutado automáticamente al realizar un push a la rama `main` o manualmente mediante `workflow_dispatch`.
 
-2. Jerson pedreros
-Mi aporte en el proyecto fue la implementacion de ramas y configuracion en el ci/cd (con jorge), siguiendo las practicas de trunk based development,  permitiendo hacer entregas continuas mas rapidas mediante ramas como feature (para funciones nuevas) y hotfix(para errores de alta gravedad).
-uno de los obstaculos que tuve fue SonarQube, comprenderlo bien, ya que es una herramienta con muchas funciones igual, pero no tuve tanta complicaciones en terminar de comprenderlo, el uso de la ia me parece excelente para aprender mas, para evitar tener dudas y comprender mas el flujo con mas ejemplos practicos,
+El pipeline contempla las siguientes etapas:
 
- como reflexion sobre este aprendizaje final , aprendi bastante sobre flujo de trabajo profesional en git, he visto mucha ventaja sobre estas skills permtitiendo ser mas competetitivo gracias al aporte de valor de esta asignatura y al profesor.
+1. **Checkout:** obtiene el código fuente del repositorio.
+2. **Validación estructural:** verifica que exista `index.html` y contenga la etiqueta HTML.
+3. **SonarQube Cloud:** realiza análisis estático y espera el resultado del Quality Gate.
+4. **Docker Buildx:** configura las herramientas necesarias para construir imágenes.
+5. **Docker Build:** construye una imagen Docker identificada mediante el SHA del commit.
+6. **Smoke Test:** inicia un contenedor temporal y comprueba que la aplicación responda con HTTP 200.
+7. **Trazabilidad:** registra el identificador del commit y la etiqueta de la imagen validada.
 
-3. Matias González
+Estas verificaciones permiten determinar si una versión supera los controles establecidos antes de considerarla candidata para el despliegue manual.
 
-Mi aporte en el proyecto fue la contenerizacion de la aplicacion web usando Docker, para asi configurar la imagen ya optimizada con nginx alpine y asi poder estructurar la orquestacion local con docker compose junto con las validaciones del pipeline.
+El despliegue en AWS EC2 se realiza por separado utilizando Docker Compose.
 
-La dificultad que tuve fue con los puertos al levantar los contenedores ya que quedaba ocupado el 8080 al hacer las pruebas, lo que me obligó a entender de mejor manera como limpiar los contenedores desde la terminal .
+## 6. Estrategia ante fallas críticas de seguridad y calidad (IE6)
 
-y ya como aprendizaje es que me quedo muy claro la importancia de usar las imagenes ligeras como alpne para optimizar los recursos  y a parte como docker compose facilita levantar todo de forma estable.
-u
+El pipeline utiliza un mecanismo de interrupción automática ante errores en sus etapas de validación.
+
+Se contemplan las siguientes condiciones de fallo:
+
+- **Quality Gate rechazado:** SonarQube detecta un incumplimiento de las políticas de calidad o seguridad configuradas.
+- **Validación estructural fallida:** el archivo HTML no cumple la comprobación básica.
+- **Error de construcción:** Docker no consigue construir la imagen.
+- **Smoke Test fallido:** la aplicación no responde con HTTP 200 durante los intentos establecidos.
+
+Para integrar el resultado de SonarQube se utiliza:
+
+```yaml
+-Dsonar.qualitygate.wait=true
+```
+
+Esta propiedad hace que el pipeline espere la evaluación del Quality Gate. Si el resultado es rechazado, la acción falla y no se ejecutan las etapas posteriores.
+
+El mismo comportamiento se aplica a las demás validaciones cuando sus comandos terminan con un código de error.
+
+Para demostrar el indicador IE6, se debe presentar una ejecución fallida en GitHub Actions, evidenciando que el pipeline se detuvo antes de completar sus etapas.
+
+## Conclusión
+
+Se implementó una estrategia DevOps basada en integración continua con GitHub Actions, análisis estático mediante SonarQube Cloud, políticas de protección de ramas y despliegue manual mediante Docker Compose en AWS EC2.
+
+El monitoreo de infraestructura se realiza con AWS CloudWatch, mientras que las validaciones automatizadas permiten detectar errores antes de seleccionar una versión para despliegue.
