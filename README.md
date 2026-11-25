@@ -99,3 +99,4 @@ Para demostrar el indicador IE6, se debe presentar una ejecución fallida en Git
 Se implementó una estrategia DevOps basada en integración continua con GitHub Actions, análisis estático mediante SonarQube Cloud, políticas de protección de ramas y despliegue manual mediante Docker Compose en AWS EC2.
 
 El monitoreo de infraestructura se realiza con AWS CloudWatch, mientras que las validaciones automatizadas permiten detectar errores antes de seleccionar una versión para despliegue.
+.
