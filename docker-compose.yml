@@ -6,10 +6,18 @@ services:
     build: .
     ports:
       - "8080:80"
-    # 🔄 Alta disponibilidad: recuperación automática ante fallas
+    # Alta disponibilidad: recuperación automática ante fallas
     restart: always
-    
-    # 🩺 Healthcheck: Monitoreo continuo de salud del contenedor (IE5)
+
+    # Centralización de logs en AWS CloudWatch 
+    logging:
+      driver: awslogs
+      options:
+        awslogs-region: us-east-1
+        awslogs-group: /devops/microservicio
+        awslogs-stream: nginx-microservicio
+
+    # Healthcheck: Monitoreo continuo de salud del contenedor 
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost/"]
       interval: 30s
@@ -17,7 +25,7 @@ services:
       retries: 3
       start_period: 5s
 
-    # ⚙️ Límites de desempeño y recursos (IE3 / IE5)
+    # Límites de desempeño y recursos
     deploy:
       resources:
         limits:
