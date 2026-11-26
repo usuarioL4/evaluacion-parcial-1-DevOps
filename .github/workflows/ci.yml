@@ -61,20 +61,16 @@ jobs:
       - name: Ejecutar Smoke Test
         run: |
           echo "Iniciando prueba funcional..."
-
           docker run -d -p 8081:8080 --name container-test test-microservice:${{ github.sha }}
-
           trap 'docker rm -f container-test >/dev/null 2>&1 || true' EXIT
 
           for intento in {1..10}; do
             http_status=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:8081/ || true)
             echo "Intento $intento - HTTP: $http_status"
-
             if [ "$http_status" = "200" ]; then
               echo "OK: Smoke Test aprobado."
               exit 0
             fi
-
             sleep 2
           done
 
