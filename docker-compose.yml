@@ -1,15 +1,13 @@
-version: '3.8'
-
 services:
   web:
     image: mi-sitio-devops:latest
     build: .
     ports:
-      - "8080:80"
+      - "8080:8080"
     # Alta disponibilidad: recuperación automática ante fallas
     restart: always
 
-    # Centralización de logs en AWS CloudWatch 
+    # Centralización de logs en AWS CloudWatch
     logging:
       driver: awslogs
       options:
@@ -17,9 +15,9 @@ services:
         awslogs-group: /devops/microservicio
         awslogs-stream: nginx-microservicio
 
-    # Healthcheck: Monitoreo continuo de salud del contenedor 
+    # Healthcheck: Monitoreo continuo de salud del contenedor
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost/"]
+      test: ["CMD", "curl", "-f", "http://localhost:8080/"]
       interval: 30s
       timeout: 10s
       retries: 3
