@@ -111,7 +111,7 @@ jobs:
 
             INICIO=$(date +%s)
 
-            cd ~/evaluacion-parcial-1-DevOps
+            cd ~/app-devops
 
             git pull origin main
 
